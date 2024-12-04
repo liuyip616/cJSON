@@ -79,6 +79,7 @@ then using the CJSON_API_VISIBILITY flag to "export" the same symbols the way CJ
 #endif
 
 /* project version */
+// 定义版本号
 #define CJSON_VERSION_MAJOR 1
 #define CJSON_VERSION_MINOR 7
 #define CJSON_VERSION_PATCH 18
@@ -86,6 +87,18 @@ then using the CJSON_API_VISIBILITY flag to "export" the same symbols the way CJ
 #include <stddef.h>
 
 /* cJSON Types: */
+/*
+定义cJSON的类型
+0：无效
+bit0 : cJSON False
+bit1 : cJSON True
+bit2 : cJSON NULL       表明是一个null
+bit3 : cJSON Number     表明是一个数字
+bit4 : cJSON String     表明是一个字符串
+bit5 : cJSON Array      表明是一个数组
+bit6 : cJSON Object     表明是一个对象
+bit7 : cJSON Raw        表明是一个原始类型
+ */
 #define cJSON_Invalid (0)
 #define cJSON_False  (1 << 0)
 #define cJSON_True   (1 << 1)
@@ -96,6 +109,18 @@ then using the CJSON_API_VISIBILITY flag to "export" the same symbols the way CJ
 #define cJSON_Object (1 << 6)
 #define cJSON_Raw    (1 << 7) /* raw json */
 
+
+
+/***
+object is left { and end with right }
+
+ */
+
+
+/*
+bit8 : cJSON_IsRef          表明是一个引用类型，而不是一个原始类型
+bit9 : cJSON_StringIsConst  表明是一个原始类型的字符串
+ */
 #define cJSON_IsReference 256
 #define cJSON_StringIsConst 512
 
@@ -103,24 +128,32 @@ then using the CJSON_API_VISIBILITY flag to "export" the same symbols the way CJ
 typedef struct cJSON
 {
     /* next/prev allow you to walk array/object chains. Alternatively, use GetArraySize/GetArrayItem/GetObjectItem */
+    /** 指向下一个元素 */
     struct cJSON *next;
+    /** 上一个元素   */
     struct cJSON *prev;
     /* An array or object item will have a child pointer pointing to a chain of the items in the array/object. */
+    /** 子元素 */
     struct cJSON *child;
 
     /* The type of the item, as above. */
+    /** 该元素的类型 */
     int type;
 
     /* The item's string, if type==cJSON_String  and type == cJSON_Raw */
     char *valuestring;
     /* writing to valueint is DEPRECATED, use cJSON_SetNumberValue instead */
+    /*  该元素的整型值 */
     int valueint;
     /* The item's number, if type==cJSON_Number */
+    /** 该元素的浮点值 */
     double valuedouble;
 
     /* The item's name string, if this item is the child of, or is in the list of subitems of an object. */
     char *string;
 } cJSON;
+
+
 
 typedef struct cJSON_Hooks
 {
